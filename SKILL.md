@@ -124,8 +124,8 @@ This is a specification, not code. Each entry describes *what* must change and *
 | `search_space.parameters[].type` | string | One of `continuous`, `discrete`, `categorical` |
 | `search_space.parameters[].range` | array or object | Value range or set of allowed values |
 | `search_space.parameters[].default` | any | Default or baseline value if known |
-| `search_space.strategy` | string | Must match the campaign's `execution.search_strategy` |
-| `search_space.trial_budget` | integer | Must not exceed the campaign's `execution.trial_budget` |
+| `search_space.strategy` | string | Must match `execution.search_strategy.kind` |
+| `search_space.trial_budget` | integer | Must not exceed `execution.trial_budget.value` |
 
 ### Dataset Usage Plan (required)
 
@@ -179,9 +179,9 @@ This is a specification, not code. Each entry describes *what* must change and *
 
 2. **Concrete enough to implement.** The design must be specific enough that the materialization worker can produce the changeset without ambiguity. Vague guidance like "improve the model" is insufficient — specify which files change, what the changes achieve, and what constraints apply.
 
-3. **Respect the trial budget.** The `search_space.trial_budget` must not exceed `execution.trial_budget` from the campaign config. If the proposal implies more trials than allowed, constrain the search space to fit within budget.
+3. **Respect the trial budget.** The `search_space.trial_budget` must not exceed `execution.trial_budget.value` from the campaign config. If the proposal implies more trials than allowed, constrain the search space to fit within budget.
 
-4. **Match the search strategy.** The `search_space.strategy` must match the campaign's `execution.search_strategy`. Do not invent a different search approach.
+4. **Match the search strategy.** The `search_space.strategy` must match the campaign's `execution.search_strategy.kind`. Do not invent a different search approach.
 
 5. **Match the runner type.** The `execution_assumptions.runner_type` must match the campaign's `execution.runner_type`. Design the experiment to be compatible with the declared execution environment.
 
@@ -204,8 +204,8 @@ This is a specification, not code. Each entry describes *what* must change and *
 | Mistake | Fix |
 |---------|-----|
 | Writing actual code instead of a specification | Describe what changes are needed at the file level, not how to write the code |
-| Exceeding the trial budget with the search space | Check `execution.trial_budget` and constrain `search_space.trial_budget` accordingly |
-| Using a search strategy different from the campaign config | Match `search_space.strategy` to `execution.search_strategy` exactly |
+| Exceeding the trial budget with the search space | Check `execution.trial_budget.value` and constrain `search_space.trial_budget` accordingly |
+| Using a search strategy different from the campaign config | Match `search_space.strategy` to `execution.search_strategy.kind` exactly |
 | Leaving code change guidance too vague to implement | Specify file paths, change types, and what each change must accomplish |
 | Ignoring per-dataset baselines when defining success | Reference both aggregate and per-dataset baselines in `success_criteria` |
 | Omitting the dataset usage plan | Every dataset in the campaign must be accounted for in `dataset_plan` |
