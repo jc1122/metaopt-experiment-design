@@ -1,0 +1,10 @@
+interface:
+  display_name: "Metaopt Experiment Design"
+  short_description: "Design concrete experiment batch specifications from winning proposals"
+  categories:
+    - ml
+    - research
+  default_prompt: >
+    Transform the winning experiment proposal into a concrete batch
+    specification with code change guidance, search space definitions,
+    and execution assumptions compatible with the backend contract.
