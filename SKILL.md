@@ -90,6 +90,8 @@ The orchestrator supplies all inputs as structured context in the subagent promp
 |-------|------|-------------|
 | `backend_contract` | object/string | Requirements from `ml-metaoptimization/references/backend-contract.md` describing what the backend expects for enqueue, status, and results |
 
+> **Note:** The orchestrator provides `backend_contract` as inline text in the subagent prompt (copied from `references/backend-contract.md`). The skill does NOT read files directly.
+
 ## Output Contract
 
 Return a response containing the following sections.
@@ -223,4 +225,5 @@ This skill is part of the `ml-metaoptimization` orchestrator ecosystem:
 - **`ml-metaoptimization/references/worker-lanes.md`** — Authoritative lane contract for the design slot, including input/output expectations and slot class rules.
 - **`ml-metaoptimization/references/contracts.md`** — State file schema, batch manifest contract, selected experiment contract, and slot field definitions.
 - **`ml-metaoptimization/references/backend-contract.md`** — What the backend expects for enqueue, status, and results — the design must produce artifacts compatible with this contract.
+- **`ml-metaoptimization/references/dispatch-guide.md`** — Defines the `DESIGN_EXPERIMENT` state inputs, standard envelope, and dispatch conventions.
 - **`ml-metaoptimization/SKILL.md`** — Orchestrator skill contract defining dispatch invariants and worker policy.
