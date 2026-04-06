@@ -21,6 +21,15 @@ It does not generate code, interact with files, dispatch subagents, or manage st
 
 The orchestrator supplies all inputs as structured context in the subagent prompt. This skill never reads files directly from the campaign repo.
 
+### Standard Envelope (provided by orchestrator on every dispatch)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `campaign_id` | string | Campaign identifier |
+| `current_iteration` | integer | Current iteration number |
+| `slot_id` | string | The slot ID dispatching this worker |
+| `attempt` | integer | Attempt number for this dispatch (1-indexed) |
+
 ### Winning Proposal
 
 | Field | Type | Description |
@@ -30,6 +39,7 @@ The orchestrator supplies all inputs as structured context in the subagent promp
 | `winning_proposal.title` | string | Concise name for the experiment |
 | `winning_proposal.rationale` | string | Why this change is expected to improve the metric |
 | `winning_proposal.target_area` | string | Which pipeline aspect this targets |
+| `winning_proposal.expected_impact` | object | `{ direction, magnitude }` — the ideation worker's impact assessment |
 
 ### Campaign Context
 
@@ -38,7 +48,8 @@ The orchestrator supplies all inputs as structured context in the subagent promp
 | `goal` | string | The campaign's top-level improvement goal |
 | `metric` | string | The objective metric being optimized |
 | `direction` | `"minimize"` or `"maximize"` | Whether lower or higher metric values are better |
-| `aggregation` | string | How per-dataset scores roll up into the aggregate (e.g. `mean`, `weighted_mean`) |
+| `aggregation_method` | string | How per-dataset scores roll up into the aggregate (e.g. `mean`, `weighted_mean`) |
+| `aggregation_weights` | object or null | Per-dataset weights when method is `weighted_mean`; `null` otherwise |
 
 ### Dataset Definitions
 
@@ -56,8 +67,8 @@ The orchestrator supplies all inputs as structured context in the subagent promp
 | `execution` | object | Execution configuration from the campaign spec |
 | `execution.runner_type` | string | How trials are executed (e.g. `ray_tune`, `subprocess`) |
 | `execution.entrypoint` | string | Shell command used to run the experiment |
-| `execution.trial_budget` | integer | Maximum number of trials the batch may run |
-| `execution.search_strategy` | string | Hyperparameter search strategy (e.g. `grid`, `random`, `bayesian`) |
+| `execution.trial_budget` | object | `{ kind: string, value: number }` — budget type and amount |
+| `execution.search_strategy` | object | `{ kind: string, ...params }` — search strategy and parameters |
 
 ### Baselines
 
